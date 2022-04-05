@@ -174,40 +174,313 @@ class Partie {
 
 }
 
-// La classe d'une case du plateau
-interface Case {
-   public void mouvement();   // la methode qui englobe l'avancement et le recul
-   public void score();       // la methode qui englobe le gain et la perte
 
+public interface Case {
+   // retourne l'index de cette case
+   public int get_index();
+   // retourne l'index de la case arrivee
+   public int mouvement(int lance_de);
+   // retourne si la case est occupee
+   public boolean occupe();
+   // se que se passe quand un joueur est dans cette case
+   public void joueur_present(Joueuer joueur);
+
+   public Joueuer get_joueur();
+   public void set_joueur(Joueuer joueur);
 }
 
-class Case_bonus implements Case {
-   private final String couleur = "VERTE";   
-   public void mouvement() {
-      
-         
+
+public class Case_depart implements Case {
+   protected final String couleur = "JAUNE";
+   protected int index;          // l'index de la case de depart
+   protected Joueur joueur;      // le joueur a la case de depart
+
+   // le constructeur de la case de depart
+   public Case_depart(int index_init, Joueur joueur) {
+      index = index_init;
+      this.joueur = joueur;
    }
-   public void score() {
+   // le constructeur de la case de depart
+   public Case_depart(int index_init) {
+      index = index_init;
+   }
+   public int get_index() {
+      return this.index;
+   }
+   // retourne l'index de cette case
+   public int mouvement(int lance_de) {
+      return 0;
+   }
+   // retourne vrai si le joueur est dans cette case
+   public boolean occupe() {
+      return this.joueur != null;
+   }
+   public void score(Joueur joueur) {}
+   public Joueur get_joueur() {
+      return this.joueur;
+   }
+   public void set_joueur(Joueur joueur) {
+      this.joueur = joueur;
    }
 }
 
-class Case_malus implements Case {
-   private final String couleur = "ROUGE";
 
+public class Case_bonus implements Case {
+   protected final String couleur = "VERTE";
+   protected int index;          // l'index de la case de bonus
+   protected Joueur joueur;      // le joueur a la case de bonus
+
+   // le constructeur de la case de bonus
+   public Case_bonus(int index, Joueur joueur) {
+      this.index = index;
+      this.joueur = joueur;
+   }
+   // le constructeur de la case de bonus
+   public Case_bonus(int index) {
+      this.index = index;
+   }
+   public int get_index() {
+      return this.index;
+   }
+   // retourne l'index de la case destination
+   public int mouvement(int lance_de) {
+      System.out.print("La case " + this.getIndex()+ " est une case bonus!");
+      int new_index =  this.get_index() + 2;
+      System.out.println(" Le joueure va atteindre la case :  " + new_index +".");
+      return new_index;
+   }
+   // retourne vrai si le joueur est dans cette case
+   public boolean occupe() {
+      return this.joueur != null;
+   }
+   public void score(Joueur joueur) {
+      joueur.score += 10;
+   }
+   public Joueur get_joueur() {
+      return this.joueur;
+   }
+   public void set_joueur(Joueur joueur) {
+      this.joueur = joueur;
+   }
 }
 
-class Case_saut implements Case {
-   private final String couleur = "ORANGE";
+public class Case_malus implements Case {
+   protected final String couleur = "ROUGE";
+   protected int index;          // l'index de la case de malus
+   protected Joueur joueur;      // le joueur a la case de malus
+
+   // le constructeur de la case de malus
+   public Case_malus(int index, Joueur joueur) {
+      this.index = index;
+      this.joueur = joueur;
+   }
+   // le constructeur de la case de malus
+   public Case_malus(int index) {
+      this.index = index;
+   }
+   public int get_index() {
+      return this.index;
+   }
+   // retourne l'index de la case destination
+   public int mouvement(int lance_de) {
+      System.out.print("La case " + this.getIndex()+ " est une case malus!");
+      int new_index =  this.get_index() - 2;
+      System.out.println(" Le joueure va atteindre la case :  " + new_index +".");
+      return new_index;
+   }
+   // retourne vrai si le joueur est dans cette case
+   public boolean occupe() {
+      return this.joueur != null;
+   }
+   public joueur_present(Joueur joueur) {
+      joueur.score -= 10;
+   }
+   public Joueur get_joueur() {
+      return this.joueur;
+   }
+   public void set_joueur(Joueur joueur) {
+      this.joueur = joueur;
+   }
 }
 
-class Case_definition implements Case {
-   private final String couleur = "BLEU";
+public class Case_saut implements Case {
+   protected final String couleur = "ORANGE";
+   protected int index;          // l'index de la case de saut
+   protected int contenu;        // le contenu de la case saut
+   protected Joueur joueur;      // le joueur a la case de saut
 
+   // le constructeur de la case de saut
+   public Case_saut(int index, int contenu, Joueur joueur) {
+      this.index = index;
+      this.contenu = contenu;
+      this.joueur = joueur;
+   }
+   // le constructeur de la case de saut
+   public Case_saut(int index, int contenu) {
+      this.index = index;
+      this.contenu = contenu;
+   }
+   public int get_index() {
+      return this.index;
+   }
+   // retourne l'index de la case destination
+   public int mouvement(int lance_de) {
+      System.out.print("La case " + this.getIndex()+ " est une case saut!");
+      int new_index =  this.get_index() + contenu;
+      System.out.println(" Le joueur va atteindre la case :  " + new_index +".");
+      return new_index;
+   }
+   // retourne vrai si le joueur est dans cette case
+   public boolean occupe() {
+      return this.joueur != null;
+   }
+   public void joueur_present () {}
+   }
+   public Joueur get_joueur() {
+      return this.joueur;
+   }
+   public void set_joueur(Joueur joueur) {
+      this.joueur = joueur;
+   }
 }
 
-class Case_image implements Case {
-   private final String couleur = "ROSE";
 
+public class Case_definition implements Case {
+   protected final String couleur = "BLEU";
+   protected int index;          // l'index de la case de definition
+   protected Joueur joueur;      // le joueur a la case de definition
+
+   // le constructeur de la case de definition
+   public Case_definition(int index, Joueur joueur) {
+      this.index = index;
+      this.joueur = joueur;
+   }
+   // le constructeur de la case de definition
+   public Case_definition(int index) {
+      this.index = index;
+   }
+   // retourne l'index de la case destination
+   public int get_index() {
+      return this.index;
+   }
+   public int mouvement(int lance_de) {}
+   public int mouvement(boolean reponse_juste) {
+      System.out.print("La case " + this.getIndex()+ " est une case definition!");
+      if (reponse_juste) {
+         System.out.println("La reponse est juste!");
+         int new_index =  this.get_index() + 4;
+         System.out.println(" Le joueure va atteindre la case :  " + new_index +".");
+
+      } else {
+         System.out.println("La reponse est fausse!");
+      }
+      return new_index;
+   }
+   // retourne vrai si le joueur est dans cette case
+   public boolean occupe() {
+      return this.joueur != null;
+   }
+   public void score(boolean reponse_juste) {
+      if (reponse_juste) {
+         this.joueur.score += 20;
+      } else {
+         this.joueur.score -= 10;
+      }
+   }
+   public Joueur get_joueur() {
+      return this.joueur;
+   }
+   public void set_joueur(Joueur joueur) {
+      this.joueur = joueur;
+   }
+}
+
+
+
+public class Case_image implements Case {
+   protected final String couleur = "ROSE";
+   protected int index;          // l'index de la case d'image
+   protected Joueur joueur;      // le joueur a la case d'image
+
+   // le constructeur de la case de image
+   public Case_image(int index, Joueur joueur) {
+      this.index = index;
+      this.joueur = joueur;
+   }
+   // le constructeur de la case de image
+   public Case_image(int index) {
+      this.index = index;
+   }
+   // retourne l'index de la case destination
+   public int get_index() {
+      return this.index;
+   }
+   public int mouvement(int lance_de) {}
+   public int mouvement(boolean reponse_juste) {
+      System.out.print("La case " + this.getIndex()+ " est une case image!");
+      int new_index = this.get_index();
+      if (reponse_juste) {
+         System.out.println("La reponse est juste!");
+         new_index =  this.get_index() + 2;
+         System.out.println(" Le joueure va atteindre la case :  " + new_index +".");
+
+      } else {
+         System.out.println("La reponse est fausse!");
+      }
+      return new_index;
+   }
+   // retourne vrai si le joueur est dans cette case
+   public boolean occupe() {
+      return this.joueur != null;
+   }
+   public void score(boolean reponse_juste) {
+      if (reponse_juste) {
+         this.joueur.score += 10;
+      }
+   }
+   public Joueur get_joueur() {
+      return this.joueur;
+   }
+   public void set_joueur(Joueur joueur) {
+      this.joueur = joueur;
+   }
+}
+
+
+public class Case_fin implements Case {
+   protected final String couleur = "NOIRE";
+   protected int index;          // l'index de la case de fin
+   protected Joueur joueur;      // le joueur a la case de fin
+
+   // le constructeur de la case de fin
+   public Case_fin(int index, Joueur joueur) {
+      this.index = index;
+      this.joueur = joueur;
+   }
+   // le constructeur de la case de fin
+   public Case_fin(int index) {
+      this.index = index;
+   }
+   public int get_index() {
+      return this.index;
+   }
+   // retourne l'index de la case destination
+   public int mouvement(int lance_de) {
+      System.out.print("La case " + this.getIndex()+ " est une case fin!");
+      return 0;
+   }
+   // retourne vrai si le joueur est dans cette case
+   public boolean occupe() {
+      return this.joueur != null;
+   }
+   public joueur_present(Joueur joueur) {}
+
+   public Joueur get_joueur() {
+      return this.joueur;
+   }
+   public void set_joueur(Joueur joueur) {
+      this.joueur = joueur;
+   }
 }
 
 
