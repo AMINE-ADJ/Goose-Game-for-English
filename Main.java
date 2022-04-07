@@ -571,7 +571,7 @@ class Partie {
             index_intermediare = inter_index;
             index_destination = this.getPlateau().getCase(index_actuel).mouvement(resultat);
          } else {
-            index_intermediare = index_actuel - resultat
+            index_intermediare = index_actuel - resultat;
             index_destination = index_intermediare;
          }
 
