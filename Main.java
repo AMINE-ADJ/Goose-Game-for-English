@@ -3,68 +3,49 @@ import java.lang.*;
 
 // La classe d'un joueur
 class Joueur {
-   private int id;
-   private String nom;
-   private int score;
+   protected int id;
+   protected String nom;
+   protected Case case_actuelle;
+   protected int score;
 
-   Joueur(int id, String nom) {
+   public Joueur(int id, String nom) {
       this.id = id;
       this.nom = nom;
    }
-
-   public void update_score(int  nouveau_score) {
-      this.score = nouveau_score;
-      System.out.println("");
+   // le constructeur de la classe Joueur
+   public Joueur (String nom, Case case_actuelle, int score) {
+      this.nom = nom;
+      this.case_actuelle = case_actuelle;
+      this.score = score;
    }
-      
-   public int get_id() { return id;}
-   public String get_nom() { return nom;}
-
-   public void set_id(int id) { this.id = id;}
-   public void set_nom(String nom) { this.nom = nom;}
-
+   // le constructeur de la classe Joueur
+   public Joueur (String nom, Case case_actuelle) {
+      this.nom = nom;
+      this.case_actuelle = case_actuelle;
+   }
+   // le constructeur de la classe Joueur
+   public Joueur (String nom) {
+      this.nom = nom;
+      this.case_actuelle = null;
+   }
+   // retourne le nom du joueur
+   public String toString() { return nom;}
+   public int getId() { return id;}
+   public String getNom() { return nom;}
+   public int getScore() { return score;}
+   // retourne la case actuelle du joueur
+   public Case getCase() { return this.case_actuelle;}
+   // change la case actuelle du joueur
+   public void setCase(Case case_actuelle) { this.case_actuelle = case_actuelle;}
+   public void setId(int id) { this.id = id;}
+   public void setNom(String nom) { this.nom = nom;}
+   public void setScore(int score) {this.score = score;}
+   private int lance_de() { return ((int) (Math.random()*10000) % 6)+ 1;}
+   public int lance_des() {return lance_de() + lance_de();}
 }
-
-
-// La classe des des
-class De {
-
-   public static int lancer_de () {
-      return 1 + (int) (Math.random() % 6);
-   }
-
-
-   public void afficher_de (int value) {
-      int[][][] face = {{{ 0, 0, 0 }, { 0, 1, 0 }, { 0, 0, 0 } }, 
-                             { { 0, 0, 1 }, { 0, 0, 0 }, { 1, 0, 0 } },
-                             { { 0, 0, 1 }, { 0, 1, 0 }, { 1, 0, 0 } }, 
-                             { { 1, 0, 1 }, { 0, 0, 0 }, { 1, 0, 1 } },
-                             { { 1, 0, 1 }, { 0, 1, 0 }, { 1, 0, 1 } }, 
-                             { { 1, 0, 1 }, { 1, 0, 1 }, { 1, 0, 1 } } };
-
-
-      int[][] display = face[value - 1];
-      System.out.println("-----");
-
-      for (int i = 0; i < 3; i++) {
-         System.out.print("|");
-         for (int j = 0; j < 3; j++) {
-            if (display[i][j] == 1) {
-               System.out.print("o");
-            } else {
-               System.out.print(" ");
-               }
-         }
-         System.out.println("|");
-      }
-      System.out.println("-----");
-   }
-}
-
 
 // La classe du plateau
-class Plateau {
-
+abstract class Plateau {
 /*
         Le plateau :
 
@@ -106,91 +87,112 @@ class Plateau {
 
           Les deux des :
 
-            D1              D2          
-          +++++++        +++++++
-          +     +        + O O +
-          +  O  +        +  O  +
-          +     +        + O O +   
-          +++++++        +++++++
+            D1           D2
+          +++++        +++++
+          +   +        +O O+
+          + O +        + O +
+          +   +        +O O+
+          +++++        +++++
 
 */
-
    // Le plateau contient deux des et 100 cases disposees en spirale
-   De D1, D2;    // les deux des 
-   Case[] cases = new Case[100];   // le plateau a 100 cases
+   protected int nombre_cases;   // le nombre de cases du plateau
+   protected Case[] cases ;   // le cases du plateau
 
-   public Plateau () {
-      D1 = new De(De.lancer_de());
-      D2 = new De(De.la);
+   // Constructeur du plateau avec le nombre de cases donne
+   public Plateau (int nombre_cases) {
+      this.nombre_cases = nombre_cases;
+   }
+   // Construit le plateau selon le plateau voulou
+   public abstract void init_plateau();
+   // Retourne les cases du plateau
+   public Case[] getCases() {
+      return this.cases;
+   }
+   // Modifie les cases du plateau
+   public void setCases(Case[] cases) {
+      this.cases = cases;
+   }
+   // Retourne la case specifiee par l'index
+   public Case getCase(int index) {
+      return this.getCases()[index];
+   }
+   // Retourne le nombre de cases du plateau
+   public int getNombre_cases() {
+      return this.nombre_cases;
+   }
+}
 
+class Plateau_jeu extends Plateau {
+
+   // Constructeur du plateau du jeu
+   public Plateau_jeu() {
+      super(100);
+   }
+   public void init_plateau() {
+      Case[] cases = new Case[100];
       Set<Integer> set = new HashSet<Integer> ();    // l'ensemble des cases
       Random rand = new Random();
 
+      cases[0] = new Case_depart(0);    // la case de depart a pour index 0
+
+      for (int i = 1; i < 99; i++) {
+         cases[i] = new Case_parcours(i);
+      }
       // On genere 25 cases aleatoirement sans la permiere et
-      // la derniere case, on change la nature de es cases de facon a avoir 
+      // la derniere case, on change la nature de es cases de facon a avoir
       // 5 cases : bonus, malus, saut, definition et image
       while (set.size() < 25) {
-         set.add(rand.nextInt(99 + 1));
+         set.add(1 + rand.nextInt(97));
       }
-
-      Iterator value = set.iterator();
-
+      Iterator<Integer> it = set.iterator();
       // 5 cases de type bonus
       for (int i = 0; i < 5; i++) {
-         cases[(int) value.next()] = new Case_bonus();
-      } 
+         int j = it.next();
+         cases[j] = new Case_bonus(j);
+      }
       // 5 cases de type malus
       for (int i = 0; i < 5; i++) {
-         cases[(int) value.next()] = new Case_malus();
-      } 
-      // 5 cases de type saut      
+         int j = it.next();
+         cases[j] = new Case_malus(j);
+      }
+      // 5 cases de type saut
       for (int i = 0; i < 5; i++) {
-         cases[(int) value.next()] = new Case_saut();
-      } 
-      // 5 cases de type definition     
+         int j = it.next();
+         cases[j] = new Case_saut(j, 1 + rand.nextInt(97));
+      }
+      // 5 cases de type definition
       for (int i = 0; i < 5; i++) {
-         cases[(int) value.next()] = new Case_definition();
-      } 
-      // 5 cases de type image 
+         int j = it.next();
+         cases[j] = new Case_definition(j);
+      }
+      // 5 cases de type image
       for (int i = 0; i < 5; i++) {
-         cases[(int) value.next()] = new Case_image();
-      } 
+         int j = it.next();
+         cases[j] = new Case_image(j);
+      }
+
+      cases[99] = new Case_fin(99);      // la case de fin a pour index 99
+      this.setCases(cases);
    }
 }
 
-// La classe d'une partie
-class Partie {
-   private Joueur joueur;
-   private Plateau plateau;
-   private int score;
 
-   public Partie (int id, String nom_joueur) {
-      joueur = new Joueur(id, nom_joueur);
-      plateau = new Plateau();
-   }
-
-   public int get_score() { return score;}
-   public void set_score(int score) { this.score = score;}
-
-}
-
-
-public interface Case {
+interface Case {
    // retourne l'index de cette case
-   public int get_index();
+   int getIndex();
    // retourne l'index de la case arrivee
-   public int mouvement(int lance_de);
+   int mouvement(int lance_de);
    // retourne si la case est occupee
-   public boolean occupe();
+   boolean occupe();
    // se que se passe quand un joueur est dans cette case
-   public void joueur_present(Joueuer joueur);
-
-   public Joueuer get_joueur();
-   public void set_joueur(Joueuer joueur);
+   void score();
+   Joueur getJoueur();
+   void setJoueur(Joueur joueur);
 }
 
 
-public class Case_depart implements Case {
+class Case_depart implements Case {
    protected final String couleur = "JAUNE";
    protected int index;          // l'index de la case de depart
    protected Joueur joueur;      // le joueur a la case de depart
@@ -204,28 +206,69 @@ public class Case_depart implements Case {
    public Case_depart(int index_init) {
       index = index_init;
    }
-   public int get_index() {
+   public int getIndex() {
       return this.index;
    }
    // retourne l'index de cette case
    public int mouvement(int lance_de) {
-      return 0;
+      System.out.print("La case " + this.getIndex() + " est la case de depart!");
+      int new_index =  lance_de;
+      System.out.println(" Le joueur va atteindre la case :  " + new_index +".");
+      return new_index;
    }
    // retourne vrai si le joueur est dans cette case
    public boolean occupe() {
       return this.joueur != null;
    }
-   public void score(Joueur joueur) {}
-   public Joueur get_joueur() {
+   public void score() {}
+   public Joueur getJoueur() {
       return this.joueur;
    }
-   public void set_joueur(Joueur joueur) {
+   public void setJoueur(Joueur joueur) {
+      this.joueur = joueur;
+   }
+}
+
+class Case_parcours implements Case {
+   protected final String couleur = "ROUGE";
+   protected int index;          // l'index de la case de parcours
+   protected Joueur joueur;      // le joueur a la case de parcours
+
+   // le constructeur de la case de parcours
+   public Case_parcours(int index, Joueur joueur) {
+      this.index = index;
+      this.joueur = joueur;
+   }
+   // le constructeur de la case de parcours
+   public Case_parcours(int index) {
+      this.index = index;
+   }
+   public int getIndex() {
+      return this.index;
+   }
+   // retourne l'index de la case destination
+   public int mouvement(int lance_de) {
+      System.out.print("La case " + this.getIndex() + " est une case parcours!");
+      int new_index =  this.getIndex() + lance_de;
+      System.out.println(" Le joueur va atteindre la case :  " + new_index +".");
+      return new_index;
+   }
+   // retourne vrai si le joueur est dans cette case
+   public boolean occupe() {
+      return this.joueur != null;
+   }
+   public void score() { }
+   public Joueur getJoueur() {
+      return this.joueur;
+   }
+   public void setJoueur(Joueur joueur) {
       this.joueur = joueur;
    }
 }
 
 
-public class Case_bonus implements Case {
+
+class Case_bonus implements Case {
    protected final String couleur = "VERTE";
    protected int index;          // l'index de la case de bonus
    protected Joueur joueur;      // le joueur a la case de bonus
@@ -239,32 +282,32 @@ public class Case_bonus implements Case {
    public Case_bonus(int index) {
       this.index = index;
    }
-   public int get_index() {
+   public int getIndex() {
       return this.index;
    }
    // retourne l'index de la case destination
    public int mouvement(int lance_de) {
       System.out.print("La case " + this.getIndex()+ " est une case bonus!");
-      int new_index =  this.get_index() + 2;
-      System.out.println(" Le joueure va atteindre la case :  " + new_index +".");
+      int new_index =  this.getIndex() + 2;
+      System.out.println(" Le joueur va atteindre la case :  " + new_index +".");
       return new_index;
    }
    // retourne vrai si le joueur est dans cette case
    public boolean occupe() {
       return this.joueur != null;
    }
-   public void score(Joueur joueur) {
-      joueur.score += 10;
+   public void score() {
+      joueur.setScore(joueur.getScore() + 10);
    }
-   public Joueur get_joueur() {
+   public Joueur getJoueur() {
       return this.joueur;
    }
-   public void set_joueur(Joueur joueur) {
+   public void setJoueur(Joueur joueur) {
       this.joueur = joueur;
    }
 }
 
-public class Case_malus implements Case {
+class Case_malus implements Case {
    protected final String couleur = "ROUGE";
    protected int index;          // l'index de la case de malus
    protected Joueur joueur;      // le joueur a la case de malus
@@ -278,32 +321,32 @@ public class Case_malus implements Case {
    public Case_malus(int index) {
       this.index = index;
    }
-   public int get_index() {
+   public int getIndex() {
       return this.index;
    }
    // retourne l'index de la case destination
    public int mouvement(int lance_de) {
       System.out.print("La case " + this.getIndex()+ " est une case malus!");
-      int new_index =  this.get_index() - 2;
-      System.out.println(" Le joueure va atteindre la case :  " + new_index +".");
+      int new_index =  this.getIndex() - 2;
+      System.out.println(" Le joueur va atteindre la case :  " + new_index +".");
       return new_index;
    }
    // retourne vrai si le joueur est dans cette case
    public boolean occupe() {
       return this.joueur != null;
    }
-   public joueur_present(Joueur joueur) {
-      joueur.score -= 10;
+   public void score() {
+      joueur.setScore(joueur.getScore() - 10);
    }
-   public Joueur get_joueur() {
+   public Joueur getJoueur() {
       return this.joueur;
    }
-   public void set_joueur(Joueur joueur) {
+   public void setJoueur(Joueur joueur) {
       this.joueur = joueur;
    }
 }
 
-public class Case_saut implements Case {
+class Case_saut implements Case {
    protected final String couleur = "ORANGE";
    protected int index;          // l'index de la case de saut
    protected int contenu;        // le contenu de la case saut
@@ -320,13 +363,13 @@ public class Case_saut implements Case {
       this.index = index;
       this.contenu = contenu;
    }
-   public int get_index() {
+   public int getIndex() {
       return this.index;
    }
    // retourne l'index de la case destination
    public int mouvement(int lance_de) {
       System.out.print("La case " + this.getIndex()+ " est une case saut!");
-      int new_index =  this.get_index() + contenu;
+      int new_index =  contenu;
       System.out.println(" Le joueur va atteindre la case :  " + new_index +".");
       return new_index;
    }
@@ -334,18 +377,17 @@ public class Case_saut implements Case {
    public boolean occupe() {
       return this.joueur != null;
    }
-   public void joueur_present () {}
-   }
-   public Joueur get_joueur() {
+   public void score() {}
+   public Joueur getJoueur() {
       return this.joueur;
    }
-   public void set_joueur(Joueur joueur) {
+   public void setJoueur(Joueur joueur) {
       this.joueur = joueur;
    }
 }
 
 
-public class Case_definition implements Case {
+class Case_definition implements Case {
    protected final String couleur = "BLEU";
    protected int index;          // l'index de la case de definition
    protected Joueur joueur;      // le joueur a la case de definition
@@ -360,16 +402,17 @@ public class Case_definition implements Case {
       this.index = index;
    }
    // retourne l'index de la case destination
-   public int get_index() {
+   public int getIndex() {
       return this.index;
    }
-   public int mouvement(int lance_de) {}
+   public int mouvement(int lance_de) {return 0;}
    public int mouvement(boolean reponse_juste) {
+      int new_index = this.getIndex();
       System.out.print("La case " + this.getIndex()+ " est une case definition!");
       if (reponse_juste) {
          System.out.println("La reponse est juste!");
-         int new_index =  this.get_index() + 4;
-         System.out.println(" Le joueure va atteindre la case :  " + new_index +".");
+         new_index =  this.getIndex() + 4;
+         System.out.println(" Le joueur va atteindre la case :  " + new_index +".");
 
       } else {
          System.out.println("La reponse est fausse!");
@@ -380,24 +423,23 @@ public class Case_definition implements Case {
    public boolean occupe() {
       return this.joueur != null;
    }
+   public void score() {}
    public void score(boolean reponse_juste) {
       if (reponse_juste) {
-         this.joueur.score += 20;
+         this.joueur.setScore(joueur.getScore() + 20);
       } else {
-         this.joueur.score -= 10;
+         this.joueur.setScore(joueur.getScore() - 10);
       }
    }
-   public Joueur get_joueur() {
+   public Joueur getJoueur() {
       return this.joueur;
    }
-   public void set_joueur(Joueur joueur) {
+   public void setJoueur(Joueur joueur) {
       this.joueur = joueur;
    }
 }
 
-
-
-public class Case_image implements Case {
+ class Case_image implements Case {
    protected final String couleur = "ROSE";
    protected int index;          // l'index de la case d'image
    protected Joueur joueur;      // le joueur a la case d'image
@@ -412,17 +454,17 @@ public class Case_image implements Case {
       this.index = index;
    }
    // retourne l'index de la case destination
-   public int get_index() {
+   public int getIndex() {
       return this.index;
    }
-   public int mouvement(int lance_de) {}
+   public int mouvement(int lance_de) {return 0;}
    public int mouvement(boolean reponse_juste) {
       System.out.print("La case " + this.getIndex()+ " est une case image!");
-      int new_index = this.get_index();
+      int new_index = this.getIndex();
       if (reponse_juste) {
          System.out.println("La reponse est juste!");
-         new_index =  this.get_index() + 2;
-         System.out.println(" Le joueure va atteindre la case :  " + new_index +".");
+         new_index =  this.getIndex() + 2;
+         System.out.println(" Le joueur va atteindre la case :  " + new_index +".");
 
       } else {
          System.out.println("La reponse est fausse!");
@@ -433,21 +475,22 @@ public class Case_image implements Case {
    public boolean occupe() {
       return this.joueur != null;
    }
+   public void score() {}
    public void score(boolean reponse_juste) {
       if (reponse_juste) {
-         this.joueur.score += 10;
+         this.joueur.setScore(joueur.getScore() + 10);
       }
    }
-   public Joueur get_joueur() {
+   public Joueur getJoueur() {
       return this.joueur;
    }
-   public void set_joueur(Joueur joueur) {
+   public void setJoueur(Joueur joueur) {
       this.joueur = joueur;
    }
 }
 
 
-public class Case_fin implements Case {
+class Case_fin implements Case {
    protected final String couleur = "NOIRE";
    protected int index;          // l'index de la case de fin
    protected Joueur joueur;      // le joueur a la case de fin
@@ -461,7 +504,7 @@ public class Case_fin implements Case {
    public Case_fin(int index) {
       this.index = index;
    }
-   public int get_index() {
+   public int getIndex() {
       return this.index;
    }
    // retourne l'index de la case destination
@@ -473,13 +516,80 @@ public class Case_fin implements Case {
    public boolean occupe() {
       return this.joueur != null;
    }
-   public joueur_present(Joueur joueur) {}
-
-   public Joueur get_joueur() {
+   public void score() {}
+   public Joueur getJoueur() {
       return this.joueur;
    }
-   public void set_joueur(Joueur joueur) {
+   public void setJoueur(Joueur joueur) {
       this.joueur = joueur;
+   }
+}
+
+
+// La classe d'une partie
+class Partie {
+   private Joueur joueur;
+   private Plateau_jeu plateau;
+   private boolean partie_finie;
+   private int score;
+
+   public Partie (Plateau_jeu plateau, Joueur joueur) {
+      this.plateau = plateau;
+      this.joueur = joueur;
+      this.partie_finie = false;
+   }
+   public int getScore() { return score;}
+   public void setScore(int score) { this.score = score;}
+   public Joueur getJoueur() { return joueur;}
+   public void setJoueur(Joueur joueur) { this.joueur = joueur;}
+   public boolean isPartie_finie() {
+      return partie_finie;
+   }
+   public void setPartie_finie(boolean partie_finie) {
+      this.partie_finie = partie_finie;
+   }
+   public Plateau_jeu getPlateau() {
+      return plateau;
+   }
+   public void setPlateau(Plateau_jeu plateau) {
+      this.plateau = plateau;
+   }
+   public void jouer() {
+      int taille_plateau = this.getPlateau().getNombre_cases();
+      while (!partie_finie) {
+         int resultat = this.joueur.lance_des();
+         // calculer le nouveau index du joueur
+         int index_actuel = joueur.getCase().getIndex();
+         int inter_index = index_actuel + resultat;
+         int index_intermediare;
+         int index_destination;
+         System.out.println(joueur.toString() + " est dans la case : " + index_actuel + ".");
+         System.out.println("Le resultat de la lance du de est : " + resultat);
+
+         // le joueur est hors du plateau
+         if (inter_index < taille_plateau) {
+            index_intermediare = inter_index;
+            index_destination = this.getPlateau().getCase(index_actuel).mouvement(resultat);
+         } else {
+            index_intermediare = index_actuel - resultat
+            index_destination = index_intermediare;
+         }
+
+         Case case_destination = this.getPlateau().getCase(index_destination);
+
+         case_destination.setJoueur(joueur);
+         case_destination.score();
+         joueur.setCase(case_destination);
+         this.getPlateau().getCase(index_destination).setJoueur(joueur);
+
+         if (index_destination == taille_plateau - 1) {
+            System.out.println(joueur.toString() + " est dans la case " + index_destination + " qui est la case fin!");
+            System.out.println("La partie est finie!");
+            System.out.println("Le score du joueur " + joueur.toString() + " est de : " + joueur.getScore());
+            partie_finie = true;
+         }
+         System.out.println();
+      }
    }
 }
 
@@ -487,25 +597,23 @@ public class Case_fin implements Case {
 // La classe du jeu 
 class Jeu {
    public static int high_score = 0;
-   public Partie[] parties;
-
-   public Jeu (String[] joueurs) {
-      parties = new Partie[joueurs.size()];      // On lance 2 partie a la fois
-      for (int i = 0; i < joueurs.size(); i++) {
-         parties[0] = new Partie(i + 1, joueurs[i]);   
-      }
-   }
-
-   public void jouer() {
-   }
-
 
 }
 
 
 
 public class Main {
-   public static void main(String args[]) {
-      
+   public static void main(String[] args) {
+      // on cree le pleteau du jeu
+      Plateau_jeu plateau = new Plateau_jeu();
+      plateau.init_plateau();
+      // on definie le joueur de la partie
+      Joueur joueur = new Joueur("Nassim NEDJAR", plateau.getCase(0));
+
+      // on initialise une partie de jeu
+      Partie partie = new Partie(plateau, joueur);
+
+      // on joue la partie
+      partie.jouer();
    }
 }
