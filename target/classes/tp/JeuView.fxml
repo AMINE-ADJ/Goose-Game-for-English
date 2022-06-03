@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane prefHeight="719.0" prefWidth="1307.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tp.Controllers.JeuController">
+   <children>
+      <Button alignment="CENTER" layoutX="517.0" layoutY="281.0" mnemonicParsing="false" onAction="#SwitchToPlateau" prefHeight="133.0" prefWidth="274.0" text="Start Playing" />
+   </children>
+</AnchorPane>

@@ -33,7 +33,7 @@
             <Image url="@Assets/Panel-1.png" />
          </image>
       </ImageView>
-      <Button fx:id="startBtn" layoutX="592.0" layoutY="509.0" mnemonicParsing="false" onAction="#SwitchToPlateau" style="-fx-background-color: transparent;">
+      <Button fx:id="startBtn" layoutX="592.0" layoutY="509.0" mnemonicParsing="false" onAction="#SwitchToJeu" style="-fx-background-color: transparent;">
          <graphic>
             <ImageView fitHeight="144.0" fitWidth="148.0" pickOnBounds="true" preserveRatio="true">
                <image>

@@ -27,10 +27,11 @@ public abstract class Case implements Serializable {
         button.setText(Integer.toString(numCase));
         button.setTextFill(Color.WHITE);
         button.setFont(new Font(18));
-        GridPane.setFillWidth(button, true);
-        GridPane.setFillHeight(button, true);
+//        GridPane.setFillWidth(button, true);
+//        GridPane.setFillHeight(button, true);
         button.setMinSize(0, 0);
-        button.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        button.setMaxSize(100, 100);
+//        button.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
 
     }
