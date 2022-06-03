@@ -24,8 +24,11 @@ public class JeuController {
         stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root,1307,719);
         String css = this.getClass().getResource("/tp/CssStyles/WelcomePage.css").toExternalForm();
-//        scene.getStylesheets().add(css);
+        scene.getStylesheets().add(css);
         stage.setScene(scene);
         stage.show();
     }
+
+
+
 }

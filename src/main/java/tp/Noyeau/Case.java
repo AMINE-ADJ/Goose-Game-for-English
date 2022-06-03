@@ -13,10 +13,10 @@ public abstract class Case implements Serializable {
 
 
     protected Button button;
-    protected String style= new String("-fx-border-radius:10 ;"
+    protected String style= new String("-fx-border-radius:7 ;"
             + "-fx-border-color: black;"
-            +	"-fx-border-width: 2 2 2 2;"
-            + "-fx-background-radius:10;"
+            +	"-fx-border-width: 2 2 2 2 ;"
+            + "-fx-background-radius:7;"
             +	"-fx-background-insets: 0;");
 
     public Case(){
