@@ -72,11 +72,13 @@ public class Joueur implements Serializable {
         this.score = score;
     }
 
-    private int lance_de() {
+    public int lance_de() {
         return ThreadLocalRandom.current().nextInt(1, 6 + 1);
     }
 
     public int lance_des() {
         return lance_de() + lance_de();
     }
+
+
 }

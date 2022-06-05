@@ -1,7 +1,12 @@
 package tp.Noyeau;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContentDisplay;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -13,6 +18,9 @@ public abstract class Case implements Serializable {
 
 
     protected Button button;
+    protected boolean isClicked =false;
+//    protected ImageView JoueurAvatar = new ImageView();
+    protected Image JoueurAvatar = new Image(getClass().getResourceAsStream("/tp/Assets/avatar.png"));
     protected String style= new String("-fx-border-radius:7 ;"
             + "-fx-border-color: black;"
             +	"-fx-border-width: 2 2 2 2 ;"
@@ -22,18 +30,37 @@ public abstract class Case implements Serializable {
     public Case(){
 
     }
-    public Case(int numCase ){
+    public Case(int numCase ){ ///------------------------here
+        ImageView avatarGraphic = new ImageView(JoueurAvatar);
+        avatarGraphic.setFitHeight(40);
+        avatarGraphic.setFitWidth(40);
         button  = new Button();
+        button.setGraphic(avatarGraphic);
+        button.getGraphic().setVisible(false);
+        button.setContentDisplay(ContentDisplay.CENTER);
         button.setText(Integer.toString(numCase));
-        button.setTextFill(Color.WHITE);
+        button.setTextFill(Color.BLACK);
         button.setFont(new Font(18));
 //        GridPane.setFillWidth(button, true);
 //        GridPane.setFillHeight(button, true);
         button.setMinSize(0, 0);
         button.setMaxSize(100, 100);
 //        button.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+//        button.setOnAction();
+    }
+    public void ClickCase(){
+        isClicked = true;
+    }
 
+    public void setClicked(boolean clicked) {
+        isClicked = clicked;
+    }
 
+    public void DisableJoueur(){
+        button.getGraphic().setVisible(false);
+    }
+    public void ActivateJoueur(){
+        button.getGraphic().setVisible(true);
     }
     // retourne l'index de cette case
     public abstract int getIndex();
@@ -53,4 +80,5 @@ public abstract class Case implements Serializable {
     public Button getButton() {
         return button;
     }
+
 }

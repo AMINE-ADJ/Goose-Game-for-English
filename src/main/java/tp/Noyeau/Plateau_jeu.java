@@ -7,6 +7,7 @@ public class Plateau_jeu extends Plateau {
     // Constructeur du plateau du jeu
     public Plateau_jeu() {
         super(100);
+//        init_plateau();
     }
 
     public void init_plateau() {
@@ -15,7 +16,7 @@ public class Plateau_jeu extends Plateau {
         Random rand = new Random();
 
         cases[0] = new Case_depart(0); // la case de depart a pour index 0
-
+        cases[0].ActivateJoueur();
         for (int i = 1; i < 99; i++) {
             cases[i] = new Case_parcours(i);
         }

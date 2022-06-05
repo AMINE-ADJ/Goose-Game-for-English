@@ -24,7 +24,7 @@ public class Case_image extends Case {
     }
 
     public int mouvement(int inter_index) {
-        return inter_index;
+        return inter_index + 2; //exemple.
     }
 
     public int mouvement(boolean reponse_juste) {

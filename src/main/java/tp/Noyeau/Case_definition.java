@@ -24,7 +24,7 @@ public class Case_definition extends Case {
     }
 
     public int mouvement(int inter_index) {
-        return inter_index;
+        return inter_index +4;
     }
 
     public int mouvement(boolean reponse_juste) {

@@ -14,7 +14,7 @@ public class Main {
         Partie partie = new Partie(plateau, joueur);
 
         // on joue la partie
-        partie.jouer();
+//        partie.jouer();
 
 //        FileOutputStream fileout = new FileOutputStream("Joueur.ser");
 //        ObjectOutputStream out = new ObjectOutputStream(fileout);
