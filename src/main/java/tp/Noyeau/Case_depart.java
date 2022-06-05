@@ -1,6 +1,7 @@
 package tp.Noyeau;
 
 public class Case_depart extends Case {
+    protected final String type =" de Depart";
     protected final String couleur = "yellow";
     protected int index; // l'index de la case de depart
     protected Joueur joueur; // le joueur a la case de depart //to know wether this cell is occuped or not
@@ -49,5 +50,8 @@ public class Case_depart extends Case {
 
     public String getCouleur() {
         return this.couleur;
+    }
+    public String getType() {
+        return type;
     }
 }

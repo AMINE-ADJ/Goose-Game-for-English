@@ -17,15 +17,9 @@ import tp.Noyeau.Plateau_jeu;
 
 public class PlateauController {
 
-
-//   private Plateau_jeu plateauModel;
-//   private Joueur joueurModel;
     private Partie PartieModel;
     private boolean DiceEnrolled=false;
     private int DicesResult;
-//    private int currentIndex =0;
-//    private int interIndex;
-//    private int indexDestination;
     @FXML
     private GridPane grille;
 
@@ -74,28 +68,42 @@ public class PlateauController {
       DicesResult = de1+de2;
 //        currentIndex = PartieModel.getCurrentCase().getIndex();
       int  interIndex = PartieModel.getCurrentCase().getIndex()+DicesResult;
-       PartieModel.setInterCase(PartieModel.getPlateau().getCase(interIndex));
-      GuideMessage.setText("Cliquez sur la case "+interIndex);
-        rollDicesBtn.setDisable(true); //jusqu'a qu'il clique sur une case.
-//      Clickhandler() te3 chaque bouton; ida clicka 3la la bonne case nkml njwzlo la PartieModel.jouerune, puis nro7 njib mn partiemodel le nouveau guideMessage bach yro7 yclicki syed 3la destination w nssetih lte3 principal + ki yclicki ( wella 7etta ykoun fl parcours ) nro7 ngolo enrolli les des a nouveau.
-//        PartieModel.getJoueur().afficherJoueurDansGrille();
-//        PartieModel.CurrentCase.
+        int taille_plateau=PartieModel.getPlateau().getNombre_cases();
+        if (interIndex < taille_plateau - 1) {
+            PartieModel.setInterCase(PartieModel.getPlateau().getCase(interIndex));
+            GuideMessage.setText("Cliquez sur la case "+interIndex);
 
-//        if(PartieModel.isPartie_finie()){
-//            Alert Congrats = new Alert(Alert.AlertType.INFORMATION);
-//            Congrats.setContentText("Vous avez fini la partie !");
-//            Congrats.setTitle("Congratz !");
-//            Congrats.setHeaderText("Bsahtek Kho");
-//            Congrats.showAndWait().ifPresent(rs -> {
-//                if (rs == ButtonType.OK) {
-//                    System.out.println("Pressed OK.");
-//                    //eddih l la scene li 9belha with Switchtojeu.
-//
-//                }
-//            });        }
+        } else if (interIndex> taille_plateau - 1){
+            int index_fin = taille_plateau - 1;
+            int supplementaire = (DicesResult - ((taille_plateau - 1) - PartieModel.getCurrentCase().getIndex()));
+            GuideMessage.setText("Vous avez depassé la case fin avec "+supplementaire+" cases");
+
+            int  index_destination = index_fin - supplementaire;
+//            CaseDestination = this.getPlateau().getCase(index_destination);
+            PartieModel.setInterCase(PartieModel.getPlateau().getCase(index_destination));
+            GuideMessage.setText("Cliquez sur la case "+ index_destination);
+        }else {
+            PartieModel.setPartie_finie(true);
+            PartieModel.setInterCase(PartieModel.getPlateau().getCase(taille_plateau - 1));
+            PartieModel.getInterCase().ActivateJoueur();
+            PartieModel.getCurrentCase().DisableJoueur();
+                Alert Congrats = new Alert(Alert.AlertType.INFORMATION);
+                Congrats.setContentText("Vous avez fini la partie !");
+                Congrats.setTitle("Congratz !");
+                Congrats.setHeaderText("Bsahtek Kho");
+                Congrats.showAndWait().ifPresent(rs -> {
+                    if (rs == ButtonType.OK) {
+                        System.out.println("Pressed OK.");
+                        //eddih l la scene li 9belha with Switchtojeu.
+
+
+                    }
+                });
+            }
+        rollDicesBtn.setDisable(true); //jusqu'au clique d'une case.
+
+
     }
-
-
     //fonction de remplissage d'une grille dans plateauView a partir de plateau.Noyeau Model.
 
     public void remplireGrille()
@@ -174,101 +182,73 @@ private class onCaseClickHandle implements EventHandler<ActionEvent>{
         }else{ //il essaye de cliquer sur le plateau.
             Object object = isClicked.getSource();
 
-            if(object == PartieModel.getInterCase().getButton()){ // cliqua 3la la case intermediaire li 9otlo 3liha m3a lwl
-//                PartieModel.getCaseDestination().ActivateJoueur();
-                PartieModel.getInterCase().ActivateJoueur(); //hnnnaaaaaaaaaaaa psk marakch tmisajori l intercase fl cas case speciale.
-                PartieModel.getCurrentCase().DisableJoueur();
-
-                PartieModel.JouerUneFois(DicesResult); //misajorit les cases....current dok hiya inter l9dima w 3ndi destination lekher ga3 avec l effet de intercase..
-              int  indexDestination = PartieModel.getCaseDestination().getIndex();
-                PartieModel.getInterCase().ActivateJoueur();
-                Score_Joueur.setText(Integer.toString(PartieModel.getScore()));
-//                PartieModel.getPlateau().getCase(currentIndex).DisableJoueur();
-//                PartieModel.getCaseDestination().DisableJoueur();
-//                PartieModel.getPlateau().getCase(interIndex).ActivateJoueur();
-//                currentIndex = interIndex;
-//                interIndex = indexDestination;
-                System.out.println("currenCase dans partie model "+PartieModel.getCurrentCase().getIndex());
-//                PartieModel.getCurrentCase().ActivateJoueur();
-//                PartieModel.getInterCase().ActivateJoueur();
-                PartieModel.getCurrentCase().ActivateJoueur();
+            if(object == PartieModel.getInterCase().getButton() ){
+                System.out.println("Inter "+PartieModel.getInterCase()+" Is Clicked !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 PartieModel.getInterCase().ActivateJoueur();
                 PartieModel.getCaseDestination().ActivateJoueur();
+                PartieModel.getCurrentCase().DisableJoueur(); //---------------------------------------------------------------------------------tdisabla mor un peu du temps
 
-                while (PartieModel.getCurrentCase().getCouleur()!="white"){ //ce n'est pas une case de parcourt //hadi l current mor maclicka seyed...fiha l inter l9dim
-//                    GuideMessage.setText("Cliquer sur la case "+ PartieModel.getCaseDestination().getIndex());
-//                    PartieModel.getInterCase().ActivateJoueur();
-//                   GuideMessage.setText("Oh c'est une Case Speciale !");
-//                    PartieModel.JouerUneFois(DicesResult);
-                    //dirlha l'impact wella segem une fonction fla partie li tkhdm le cas simple...la case courante tdirlha l'impact.
-
-//                    try {
 //
-//                        GuideMessage.setText("Oh c'est une Case Speciale !");
-//                        Thread.sleep(1000);
-//                        System.out.println("First waiting 01");
-//
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
+                PartieModel.getInterCase().ActivateJoueur();
 
-//                    PartieModel.getCurrentCase().ActivateJoueur();
-//                    PartieModel.setInterCase(PartieModel.getCaseDestination());
+                PartieModel.JouerUneFois(DicesResult); //misajorit les cases....current dok hiya inter l9dima w 3ndi destination lekher ga3 avec l effet de intercase..
+//              int  indexDestination = PartieModel.getCaseDestination().getIndex();
+                System.out.println("2 Mor Jouer Une Fois. ");
+                System.out.println("La Current Case  : "+ PartieModel.getCurrentCase().getIndex());
+                System.out.println("La Case inter : "+ PartieModel.getInterCase().getIndex());
+                System.out.println("La Case Destination  : "+ PartieModel.getCaseDestination().getIndex());
+                Score_Joueur.setText(Integer.toString(PartieModel.getScore()));
+                PartieModel.getCurrentCase().ActivateJoueur();
+
+                while (PartieModel.getInterCase().getCouleur()!="white"){ //ce n'est pas une case de parcourt //hadi l current mor maclicka seyed...fiha l inter l9dim
+
+                    PartieModel.getInterCase().ActivateJoueur();
+                    System.out.println("Inter Case = "+ PartieModel.getInterCase().getIndex() +"is activated ");
                     try {
+                        PartieModel.getInterCase().DisableJoueur();
+                        GuideMessage.setText("Oh C'est une Case "+PartieModel.getInterCase().getType()+" !");
 
-                        GuideMessage.setText("Oh c'est une Case Speciale !");
-                        Thread.sleep(1000);
+                        Thread.sleep(500);
                         System.out.println("First waiting 01");
 
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-//                    PartieModel.getInterCase().DisableJoueur();
-                    PartieModel.getCaseDestination().ActivateJoueur();
-                    PartieModel.getCurrentCase().DisableJoueur();
-                    PartieModel.setCurrentCase(PartieModel.getCaseDestination()); //hna current = destination te3 iteration lwla...li 7ssbtha m3a lwl nl jouer l9dima
-//                    if()
+                    PartieModel.getCurrentCase().DisableJoueur(); //--------------------------------------------------
+                    PartieModel.setInterCase(PartieModel.getCaseDestination());
+                    PartieModel.setCurrentCase(PartieModel.getInterCase()); //hna current = destination te3 iteration lwla...li 7ssbtha m3a lwl nl jouer l9dima
+
+
+                    System.out.println("4 Mor Setting CurrentCase <--- Case Destination. ");
+                    System.out.println("La Current Case  : "+ PartieModel.getCurrentCase().getIndex());
+                    System.out.println("La Case inter : "+ PartieModel.getInterCase().getIndex());
+                    System.out.println("La Case Destination  : "+ PartieModel.getCaseDestination().getIndex());
+//                    PartieModel.getCurrentCase().ActivateJoueur();
                     PartieModel.JouerEncore();
 
-//                    PartieModel.get
-//                    try {
-//
-//                        GuideMessage.setText("Oh c'est une Case Speciale !");
-//                        Thread.sleep(2000);
-//                        System.out.println("Second waiting 02");
-//
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-                  PartieModel.getCurrentCase().DisableJoueur(); //disablit l current l9dim.
-                    System.out.println("index case destination from la boucle : "+ PartieModel.getCaseDestination().getIndex());
+                    PartieModel.getCurrentCase().ActivateJoueur();
+                    System.out.println("5 Mor jouer Encore. ");
+                    System.out.println("La Current Case  : "+ PartieModel.getCurrentCase().getIndex());
+                    System.out.println("La Case inter : "+ PartieModel.getInterCase().getIndex());
+                    System.out.println("La Case Destination  : "+ PartieModel.getCaseDestination().getIndex());
+
+                    System.out.println("U r not disabeling current l9dim ");
                   PartieModel.setCurrentCase(PartieModel.getCaseDestination()); //pour pouvoir avancer.
-                    System.out.println("index current case  from la boucle apres le setting : "+ PartieModel.getCurrentCase().getIndex());
+                    PartieModel.getCurrentCase().DisableJoueur();
                   PartieModel.getCaseDestination().ActivateJoueur();
 
-                    System.out.println("Caaaaaaaaaaase speciale. ");
 
 
                 }
+
                 DiceEnrolled=false;
                 rollDicesBtn.setDisable(false);
             } else{
                 GuideMessage.setText("NON!,Vous devez sur la case "+PartieModel.getInterCase().getIndex());
             }
-//            Case CasetoGo = PartieModel.getInterCase();
-
-
-
         }
-
-
     }
 }
-
-
-
-
-
 
 
 

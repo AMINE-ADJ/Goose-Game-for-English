@@ -3,6 +3,7 @@ package tp.Noyeau;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Case_saut extends Case {
+    protected final String type ="Saut";
     protected final String couleur = "orange";
     protected int index; // l'index de la case de saut
     protected int contenu; // le contenu de la case saut
@@ -30,7 +31,7 @@ public class Case_saut extends Case {
     // retourne l'index de la case destination
     public int mouvement(int inter_index) {
         System.out.print("La case " + this.getIndex() + " est une case saut!");
-        int new_index = ThreadLocalRandom.current().nextInt(0, 99 + 1);
+        int new_index = ThreadLocalRandom.current().nextInt(1, 99 + 1);
         System.out.println(" Le joueur va atteindre la case :  " + new_index + ".");
         return new_index;
     }
@@ -54,5 +55,8 @@ public class Case_saut extends Case {
 
     public String getCouleur() {
         return this.couleur;
+    }
+    public String getType() {
+        return type;
     }
 }

@@ -58,9 +58,11 @@ public abstract class Case implements Serializable {
 
     public void DisableJoueur(){
         button.getGraphic().setVisible(false);
+        System.out.println("Is disactivated.................................");
     }
     public void ActivateJoueur(){
         button.getGraphic().setVisible(true);
+        System.out.println("Is Activated....");
     }
     // retourne l'index de cette case
     public abstract int getIndex();
@@ -81,4 +83,5 @@ public abstract class Case implements Serializable {
         return button;
     }
 
+    public abstract String getType();
 }

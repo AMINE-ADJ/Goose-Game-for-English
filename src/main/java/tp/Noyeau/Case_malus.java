@@ -1,6 +1,7 @@
 package tp.Noyeau;
 
 public class Case_malus extends Case {
+    protected final String type ="Malus";
     protected final String couleur = "red";
     protected int index; // l'index de la case de malus
     protected Joueur joueur; // le joueur a la case de malus
@@ -49,5 +50,8 @@ public class Case_malus extends Case {
 
     public String getCouleur() {
         return this.couleur;
+    }
+    public String getType() {
+        return type;
     }
 }

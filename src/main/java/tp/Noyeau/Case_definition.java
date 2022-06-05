@@ -1,6 +1,7 @@
 package tp.Noyeau;
 
 public class Case_definition extends Case {
+    protected final String type ="Definition";
     protected final String couleur = "blue";
     protected int index; // l'index de la case de definition
     protected Joueur joueur; // le joueur a la case de definition
@@ -68,5 +69,9 @@ public class Case_definition extends Case {
 
     public String getCouleur() {
         return this.couleur;
+    }
+
+    public String getType() {
+        return type;
     }
 }

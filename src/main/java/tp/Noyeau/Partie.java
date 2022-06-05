@@ -90,77 +90,6 @@ public class Partie implements Serializable {
         this.plateau = plateau;
     }
 
-//    public void jouer(int resultatLancesDes) {
-//        int taille_plateau = this.getPlateau().getNombre_cases();
-////        while (!partie_finie) {
-//            int resultat = resultatLancesDes;
-//            // calculer le nouveau index du joueur
-//            int index_actuel = joueur.getCase().getIndex();
-//            CurrentCase = this.getPlateau().getCase(index_actuel);
-//            int inter_index = index_actuel + resultat;
-//            interCase = this.getPlateau().getCase(inter_index);
-//            // int index_intermediare;
-//            int index_destination;
-//            System.out.println(joueur.toString() + " est dans la case : " + index_actuel + ".");
-//            System.out.println("Le resultat de la lance du de est : " + resultat);
-//            //-----------here go to
-//            if (inter_index < taille_plateau - 1) { // 99
-//
-//                System.out.println("Le joueur doit se deplacer premierement en clickant sur la case :" + inter_index);
-//
-////                donc tu dois clicker sur la interCase brk apres ida kanet une case speciale trj3k automatiquement.
-//                System.out.println(" la case :" + inter_index + " est une case intermediaire de couleur "
-//                        + this.getPlateau().getCase(inter_index).getCouleur());
-//                index_destination = this.getPlateau().getCase(inter_index).mouvement(inter_index);
-//                this.score = this.getPlateau().getCase(inter_index).score(this.score);
-//                System.out.println("le score de joueur apres le parcours d'une case "
-//                        + this.getPlateau().getCase(inter_index).getCouleur() + "est : " + this.score);
-//
-//                if (index_destination > taille_plateau - 1) { // case bonus a 99
-//                    index_destination = taille_plateau - 1;
-//                } else if (index_destination < 0) {
-//                    index_destination = 0;
-//                }
-//            } else {
-//                int index_fin = taille_plateau - 1;
-//                int supplementaire = (resultat - ((taille_plateau - 1) - index_actuel));
-//                index_destination = index_fin - supplementaire;
-//                System.out.println("le joueur a depasser la case Fin avec " + supplementaire + " Cases");
-//                System.out.println("donc il va se trouver maintenant a la case : " + index_destination);
-//            }
-//
-//             CaseDestination = this.getPlateau().getCase(index_destination);
-////            Case case_actuelle = this.getPlateau().getCase(index_actuel);
-//            CurrentCase.setJoueur(null); // to change the occupied state.
-//            CaseDestination.setJoueur(joueur);
-//            joueur.setCase(CaseDestination);
-//
-////                while (CaseDestination.getCouleur() != "white") { // n'est pas une case de parcours => une autre case speciale.
-////                    int interIndex = CaseDestination.getIndex();
-////
-////
-////                }
-//            if (index_destination == taille_plateau - 1) {
-//                System.out.println(
-//                        joueur.toString() + " est dans la case " + index_destination + " qui est la case fin!");
-//                System.out.println("La partie est finie!");
-//                System.out.println("Le Meilleur score du joueur " + joueur.toString() + " est : " + joueur.getScore());
-//                partie_finie = true;
-//            }
-//            System.out.println();
-////        }
-//
-//        System.out.println("\n Votre score final de cette partie \n :" + this.score);
-//        if (this.score > joueur.getScore()) {
-//            System.out.println("\n Votre meilleur score avant cette partie : " + joueur.getScore());
-//            joueur.setScore(this.score);
-//            System.out.println(" \n Congrats! vous avez battu votre meilleur score !");
-//            System.out.println("\n Votre nouveau meilleur score  : " + joueur.getScore());
-//        } else {
-//            System.out.println("meilleur score li kan 3ndk khir, Good luck next time!");
-//        }
-//    }
-
     public void JouerUneFois(int resultatLancesDes) {
         int taille_plateau = this.getPlateau().getNombre_cases();
 
@@ -174,18 +103,10 @@ public class Partie implements Serializable {
             System.out.println(joueur.toString() + " est dans la case : " + index_actuel + ".");
             System.out.println("Le resultat de la lance du de est : " + resultat);
             if (inter_index < taille_plateau - 1) { // 99
-                interCase = this.getPlateau().getCase(inter_index);
+                interCase = this.getPlateau().getCase(inter_index);// ur setting in mn berra tan.....
                 System.out.println("Le joueur doit se deplacer premierement en clickant sur la case :" + inter_index);
-                //click evenet bach ykemel literation
-//                while(!interCase.isClicked){
-//                    GuideMessage = "Vous devez clicker sur la case "+inter_index+" pour continuer !";
-//                    System.out.println(GuideMessage);
-//                }
                 System.out.println(" la case :" + inter_index + " est une case intermediaire de couleur "
                         + this.getPlateau().getCase(inter_index).getCouleur());
-//                GuideMessage = "Vous devez clicker sur la case "+inter_index+" pour continuer !";//affichih mn berra khir.....and then recupiri le resultat final mmla classe partie.
-
-
                 index_destination = this.getPlateau().getCase(inter_index).mouvement(inter_index); //ytappliqua l effect de la case intermediaire.ida kanet parcout mattbdlch
 
                 this.score = this.getPlateau().getCase(inter_index).score(this.score); //PartieModel lzm tkoun kayna ....
@@ -210,46 +131,11 @@ public class Partie implements Serializable {
                 System.out.println("donc il va se trouver maintenant a la case : " + index_destination);
             }
 
-
             CaseDestination = this.getPlateau().getCase(index_destination);
-//            Case case_actuelle = this.getPlateau().getCase(index_actuel);
-//            CurrentCase.setJoueur(null); // to change the occupied state.
-//            CurrentCase.DisableJoueur(); //////////------------------------------------------------hna matro7ch tdesabli direct...khellih yclicki bech tdizabli
-//            CaseDestination.setJoueur(joueur);
-//            CaseDestination.ActivateJoueur();
 
             joueur.setCase(interCase);
 //            joueur.setCase(CaseDestination);
             CurrentCase = interCase;
-//            interCase=CaseDestination;
-
-
-//        while (CaseDestination.getCouleur() != "white") { //mayzidch ylanci le de , wyel9a l effect te3 la case yssra w7do
-////            System.out.println("Khraaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-//             int newCurrentIndex = CaseDestination.getIndex();
-//                index_destination = this.getPlateau().getCase(newCurrentIndex).mouvement(newCurrentIndex);
-//                this.score = this.getPlateau().getCase(newCurrentIndex).score(this.score);
-//
-//                if (index_destination > taille_plateau - 1) { // case bonus a 99
-////                    index_destination = taille_plateau - 1;
-//                    //t9der tkhellih yjouz nrml ou ien trej3o llor kima hekka
-//
-//                    int index_fin = taille_plateau - 1;
-//                    int supplementaire = (resultat - ((taille_plateau - 1) - newCurrentIndex));
-//                    index_destination = index_fin - supplementaire;
-//                    System.out.println("le joueur a depasser la case Fin avec " + supplementaire + " Cases");
-//                    System.out.println("donc il va se trouver maintenant a la case : " + index_destination);
-//                } else if (index_destination < 0) {
-//                    index_destination = 0;
-//                }
-//                CaseDestination = this.getPlateau().getCase(index_destination);
-////            Case case_actuelle = this.getPlateau().getCase(index_actuel);
-//                CurrentCase.setJoueur(null); // to change the occupied state.
-//                CaseDestination.setJoueur(joueur);
-//                joueur.setCase(CaseDestination);
-//
-//
-//            }
 
             if (index_destination == taille_plateau - 1) {
                 System.out.println(
@@ -264,7 +150,14 @@ public class Partie implements Serializable {
 
         public void JouerEncore(){
             int indexDestination = CurrentCase.mouvement(CurrentCase.getIndex());
+          int  taille_plateau = plateau.getNombre_cases();
+            if (indexDestination > taille_plateau - 1) { // case bonus a 99
+                indexDestination = taille_plateau - 1; //bonus y9der yrb7k direct....
+                partie_finie = true;
 
+            } else if (indexDestination < 0) {
+                indexDestination = 0;
+            }
             System.out.println("Affichage indexDestination from JouerEncore : " +indexDestination);//mahoch ytbedel l indexDestination..raho y93ed = indexDestiantion
             CaseDestination = plateau.getCase(indexDestination);//Maj desitantion
             this.score = CurrentCase.score(this.score);
@@ -273,7 +166,6 @@ public class Partie implements Serializable {
             CaseDestination.setJoueur(joueur);
             joueur.setCase(CaseDestination);
             interCase = CurrentCase;
-//            CurrentCase=CaseDestination; rak dayerha berra mor un peu de temps.....khir oui!
 
 
         }

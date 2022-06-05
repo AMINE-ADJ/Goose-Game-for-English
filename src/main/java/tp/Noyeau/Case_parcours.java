@@ -1,6 +1,7 @@
 package tp.Noyeau;
 
 public class Case_parcours extends Case {
+    protected final String type ="de Parcours";
     protected final String couleur = "white";
     protected int index; // l'index de la case de parcours
     protected Joueur joueur; // le joueur a la case de parcours
@@ -50,5 +51,8 @@ public class Case_parcours extends Case {
 
     public String getCouleur() {
         return this.couleur;
+    }
+    public String getType() {
+        return type;
     }
 }

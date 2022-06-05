@@ -1,6 +1,7 @@
 package tp.Noyeau;
 
 public class Case_image extends Case {
+    protected final String type ="Image";
     protected final String couleur = "pink";
     protected int index; // l'index de la case d'image
     protected Joueur joueur; // le joueur a la case d'image
@@ -69,5 +70,8 @@ public class Case_image extends Case {
 
     public String getCouleur() {
         return this.couleur;
+    }
+    public String getType() {
+        return type;
     }
 }

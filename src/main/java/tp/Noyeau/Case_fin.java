@@ -1,7 +1,12 @@
 package tp.Noyeau;
 
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+
 public class Case_fin extends Case {
+    protected final String type ="Fin";
     protected final String couleur = "black";
+
     protected int index; // l'index de la case de fin
     protected Joueur joueur; // le joueur a la case de fin
 
@@ -47,5 +52,8 @@ public class Case_fin extends Case {
 
     public String getCouleur() {
         return this.couleur;
+    }
+    public String getType() {
+        return type;
     }
 }

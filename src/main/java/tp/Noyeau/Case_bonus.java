@@ -1,6 +1,12 @@
 package tp.Noyeau;
 
+import javafx.css.CssParser;
+
 public class Case_bonus extends Case {
+    protected final String type ="Bonus";
+
+
+
     protected final String couleur = "green";
     protected int index; // l'index de la case de bonus
     protected Joueur joueur; // le joueur a la case de bonus
@@ -9,6 +15,7 @@ public class Case_bonus extends Case {
     public Case_bonus(int index, Joueur joueur) {
         this.index = index;
         this.joueur = joueur;
+
     }
 
     // le constructeur de la case de bonus
@@ -16,6 +23,7 @@ public class Case_bonus extends Case {
         super(index);
         this.index = index;
         button.setStyle(style+"-fx-background-color:"+couleur);
+
     }
 
     public int getIndex() {
@@ -49,5 +57,8 @@ public class Case_bonus extends Case {
 
     public String getCouleur() {
         return this.couleur;
+    }
+    public String getType() {
+        return type;
     }
 }
