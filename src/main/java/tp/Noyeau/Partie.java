@@ -155,6 +155,7 @@ public class Partie implements Serializable {
                 indexDestination = taille_plateau - 1; //bonus y9der yrb7k direct....
                 partie_finie = true;
 
+
             } else if (indexDestination < 0) {
                 indexDestination = 0;
             }

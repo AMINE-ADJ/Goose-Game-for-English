@@ -24,7 +24,7 @@ public class PlateauManagement {
          //plateau jeu test brk...sinn ra7 yji hada m3mr.
         plateauModel = new Plateau_jeu();//for testing brk
         plateauModel.init_plateau();
-        Joueur joueurModel = new Joueur("Amine", plateauModel.getCase(0));
+        Joueur joueurModel = new Joueur("Nassiiim", plateauModel.getCase(0));
          partieModel = new Partie(plateauModel,joueurModel);//la partie mattcryach hna...t3mrha mn berra w npassiha direct ll controller psk rahi champs....
 
 //        controller.setPlateauModel(plateauModel);

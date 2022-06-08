@@ -105,6 +105,7 @@ public class PlateauController {
         }else {
             PartieModel.setPartie_finie(true);
             PartieModel.setInterCase(PartieModel.getPlateau().getCase(taille_plateau - 1));
+            PartieModel.getJoueur().setCase((PartieModel.getPlateau().getCase(taille_plateau - 1)));
 //            PartieModel.getInterCase().ActivateJoueur();
 //            PartieModel.getCurrentCase().DisableJoueur();
 //                Alert Congrats = new Alert(Alert.AlertType.INFORMATION);
@@ -264,6 +265,13 @@ private class onCaseClickHandle implements EventHandler<ActionEvent>{
 
 
                     }
+                    if(PartieModel.getCurrentCase().getIndex()==99){
+                        try {
+                            CongratsManagement congratsManagement = new CongratsManagement(MainStage,PartieModel);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
                     force = false;
                     DiceEnrolled=false;
                     rollDicesBtn.setDisable(false);
@@ -271,18 +279,6 @@ private class onCaseClickHandle implements EventHandler<ActionEvent>{
                     //fin partie.
                     PartieModel.getInterCase().ActivateJoueur();
                     PartieModel.getCurrentCase().DisableJoueur();
-//                    Alert Congrats = new Alert(Alert.AlertType.INFORMATION);
-//                    Congrats.setContentText("Vous avez fini la partie !");
-//                    Congrats.setTitle("Congratz !");
-//                    Congrats.setHeaderText("Bsahtek Kho");
-//                    Congrats.showAndWait().ifPresent(rs -> {
-//                        if (rs == ButtonType.OK) {
-//                            System.out.println("Pressed OK.");
-//                            //eddih l la scene li 9belha with Switchtojeu.
-//
-//
-//                        }
-//                    });
                     try {
                         CongratsManagement congratsManagement = new CongratsManagement(MainStage,PartieModel);
                     } catch (IOException e) {
@@ -293,7 +289,7 @@ private class onCaseClickHandle implements EventHandler<ActionEvent>{
                 }
 
             } else{
-                GuideMessage.setText("NON!,Vous devez sur la case "+PartieModel.getInterCase().getIndex());
+                GuideMessage.setText("NON!, Vous devez cliquer sur la case "+PartieModel.getInterCase().getIndex());
             }
         }
     }
