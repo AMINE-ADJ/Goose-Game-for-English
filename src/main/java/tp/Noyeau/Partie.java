@@ -151,7 +151,7 @@ public class Partie implements Serializable {
         public void JouerEncore(){
             int indexDestination = CurrentCase.mouvement(CurrentCase.getIndex());
           int  taille_plateau = plateau.getNombre_cases();
-            if (indexDestination > taille_plateau - 1) { // case bonus a 99
+            if (indexDestination >= taille_plateau - 1) { // case bonus a 99
                 indexDestination = taille_plateau - 1; //bonus y9der yrb7k direct....
                 partie_finie = true;
 

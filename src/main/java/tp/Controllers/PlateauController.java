@@ -3,25 +3,33 @@ package tp.Controllers;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import tp.Noyeau.Case;
-import tp.Noyeau.Joueur;
-import tp.Noyeau.Partie;
-import tp.Noyeau.Plateau_jeu;
+import javafx.stage.Stage;
+import tp.Noyeau.*;
+import tp.Ui.CongratsManagement;
+
+import java.io.IOException;
+import java.util.Optional;
 
 public class PlateauController {
 
     private Partie PartieModel;
     private boolean DiceEnrolled=false;
     private int DicesResult;
+    private Stage MainStage;
+    private boolean force = false;
     @FXML
     private GridPane grille;
+
+    @FXML
+    private Button allerBtn;
 
     @FXML
     private Label GuideMessage;
@@ -41,7 +49,11 @@ public class PlateauController {
     @FXML
     private Button rollDicesBtn;
 
-
+    @FXML
+    private Button QuitterBtn;
+//    public void setMainStage(Stage MainStage){
+//        this.MainStage = MainStage;
+//    }
     public Partie getPartieModel() {
         return PartieModel;
     }
@@ -51,12 +63,20 @@ public class PlateauController {
         Nom_Joueur.setText(PartieModel.getJoueur().getNom());
         int Currentscore = PartieModel.getScore();
         Score_Joueur.setText(Integer.toString(Currentscore));
-
     }
 
+    @FXML
+    void SwitchBackToJeu(ActionEvent event) throws IOException {
+//        DialogStage.close();
+        MainStage = (Stage) ((Node )event.getSource()).getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getResource("/tp/JeuView.fxml"));
+        Scene scene = new Scene(root,1307,719);
+        MainStage.setScene(scene);
+    }
 
     @FXML
     void rollTheDices(ActionEvent event)  {
+        MainStage = (Stage) ((Node )event.getSource()).getScene().getWindow();
         DiceEnrolled = true;
       int de1= PartieModel.getJoueur().lance_de();
         Image De1Image = new Image(getClass().getResourceAsStream("/tp/Dices/dice0"+de1+".png"));
@@ -85,20 +105,20 @@ public class PlateauController {
         }else {
             PartieModel.setPartie_finie(true);
             PartieModel.setInterCase(PartieModel.getPlateau().getCase(taille_plateau - 1));
-            PartieModel.getInterCase().ActivateJoueur();
-            PartieModel.getCurrentCase().DisableJoueur();
-                Alert Congrats = new Alert(Alert.AlertType.INFORMATION);
-                Congrats.setContentText("Vous avez fini la partie !");
-                Congrats.setTitle("Congratz !");
-                Congrats.setHeaderText("Bsahtek Kho");
-                Congrats.showAndWait().ifPresent(rs -> {
-                    if (rs == ButtonType.OK) {
-                        System.out.println("Pressed OK.");
-                        //eddih l la scene li 9belha with Switchtojeu.
-
-
-                    }
-                });
+//            PartieModel.getInterCase().ActivateJoueur();
+//            PartieModel.getCurrentCase().DisableJoueur();
+//                Alert Congrats = new Alert(Alert.AlertType.INFORMATION);
+//                Congrats.setContentText("Vous avez fini la partie !");
+//                Congrats.setTitle("Congratz !");
+//                Congrats.setHeaderText("Bsahtek Kho");
+//                Congrats.showAndWait().ifPresent(rs -> {
+//                    if (rs == ButtonType.OK) {
+//                        System.out.println("Pressed OK.");
+//                        //eddih l la scene li 9belha with Switchtojeu.
+//
+//
+//                    }
+//                });
             }
         rollDicesBtn.setDisable(true); //jusqu'au clique d'une case.
 
@@ -181,6 +201,7 @@ private class onCaseClickHandle implements EventHandler<ActionEvent>{
             GuideMessage.setText("Roulez les des svp !");
         }else{ //il essaye de cliquer sur le plateau.
             Object object = isClicked.getSource();
+            MainStage = (Stage) ((Node )isClicked.getSource()).getScene().getWindow();
 
             if(object == PartieModel.getInterCase().getButton() ){
                 System.out.println("Inter "+PartieModel.getInterCase()+" Is Clicked !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
@@ -190,59 +211,87 @@ private class onCaseClickHandle implements EventHandler<ActionEvent>{
 
 //
                 PartieModel.getInterCase().ActivateJoueur();
-
-                PartieModel.JouerUneFois(DicesResult); //misajorit les cases....current dok hiya inter l9dima w 3ndi destination lekher ga3 avec l effet de intercase..
+                if (PartieModel.getInterCase().getIndex()!=99){
+                  if(!force) { PartieModel.JouerUneFois(DicesResult);} //misajorit les cases....current dok hiya inter l9dima w 3ndi destination lekher ga3 avec l effet de intercase..
 //              int  indexDestination = PartieModel.getCaseDestination().getIndex();
-                System.out.println("2 Mor Jouer Une Fois. ");
-                System.out.println("La Current Case  : "+ PartieModel.getCurrentCase().getIndex());
-                System.out.println("La Case inter : "+ PartieModel.getInterCase().getIndex());
-                System.out.println("La Case Destination  : "+ PartieModel.getCaseDestination().getIndex());
-                Score_Joueur.setText(Integer.toString(PartieModel.getScore()));
-                PartieModel.getCurrentCase().ActivateJoueur();
+                    System.out.println("2 Mor Jouer Une Fois. ");
+                    System.out.println("La Current Case  : "+ PartieModel.getCurrentCase().getIndex());
+                    System.out.println("La Case inter : "+ PartieModel.getInterCase().getIndex());
+                    System.out.println("La Case Destination  : "+ PartieModel.getCaseDestination().getIndex());
+                    Score_Joueur.setText(Integer.toString(PartieModel.getScore()));
+//                    PartieModel.getCurrentCase().ActivateJoueur();
 
-                while (PartieModel.getInterCase().getCouleur()!="white"){ //ce n'est pas une case de parcourt //hadi l current mor maclicka seyed...fiha l inter l9dim
+                    while (PartieModel.getInterCase().getCouleur()!="white" && PartieModel.getInterCase().getCouleur()!="black" ){ //ce n'est pas une case de parcourt //hadi l current mor maclicka seyed...fiha l inter l9dim
 
+                        PartieModel.getInterCase().ActivateJoueur();
+                        System.out.println("Inter Case = "+ PartieModel.getInterCase().getIndex() +"is activated ");
+                        try {
+                            PartieModel.getInterCase().DisableJoueur();
+                            GuideMessage.setText("Oh C'est une Case "+PartieModel.getInterCase().getType()+" !");
+
+                            Thread.sleep(500);
+                            System.out.println("First waiting 01");
+
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        PartieModel.getCurrentCase().DisableJoueur(); //--------------------------------------------------
+                        PartieModel.setInterCase(PartieModel.getCaseDestination());
+                        PartieModel.setCurrentCase(PartieModel.getInterCase()); //hna current = destination te3 iteration lwla...li 7ssbtha m3a lwl nl jouer l9dima
+
+
+                        System.out.println("4 Mor Setting CurrentCase <--- Case Destination. ");
+                        System.out.println("La Current Case  : "+ PartieModel.getCurrentCase().getIndex());
+                        System.out.println("La Case inter : "+ PartieModel.getInterCase().getIndex());
+                        System.out.println("La Case Destination  : "+ PartieModel.getCaseDestination().getIndex());
+//                    PartieModel.getCurrentCase().ActivateJoueur();
+                        if (PartieModel.getInterCase().getIndex()!=99){
+                            PartieModel.JouerEncore();
+                        }
+
+
+                        PartieModel.getCurrentCase().ActivateJoueur();
+                        System.out.println("5 Mor jouer Encore. ");
+                        System.out.println("La Current Case  : "+ PartieModel.getCurrentCase().getIndex());
+                        System.out.println("La Case inter : "+ PartieModel.getInterCase().getIndex());
+                        System.out.println("La Case Destination  : "+ PartieModel.getCaseDestination().getIndex());
+
+                        System.out.println("U r not disabeling current l9dim ");
+                        PartieModel.setCurrentCase(PartieModel.getCaseDestination()); //pour pouvoir avancer.
+                        PartieModel.getCurrentCase().DisableJoueur();
+                        PartieModel.getCaseDestination().ActivateJoueur();
+
+
+
+                    }
+                    force = false;
+                    DiceEnrolled=false;
+                    rollDicesBtn.setDisable(false);
+                }else{
+                    //fin partie.
                     PartieModel.getInterCase().ActivateJoueur();
-                    System.out.println("Inter Case = "+ PartieModel.getInterCase().getIndex() +"is activated ");
+                    PartieModel.getCurrentCase().DisableJoueur();
+//                    Alert Congrats = new Alert(Alert.AlertType.INFORMATION);
+//                    Congrats.setContentText("Vous avez fini la partie !");
+//                    Congrats.setTitle("Congratz !");
+//                    Congrats.setHeaderText("Bsahtek Kho");
+//                    Congrats.showAndWait().ifPresent(rs -> {
+//                        if (rs == ButtonType.OK) {
+//                            System.out.println("Pressed OK.");
+//                            //eddih l la scene li 9belha with Switchtojeu.
+//
+//
+//                        }
+//                    });
                     try {
-                        PartieModel.getInterCase().DisableJoueur();
-                        GuideMessage.setText("Oh C'est une Case "+PartieModel.getInterCase().getType()+" !");
-
-                        Thread.sleep(500);
-                        System.out.println("First waiting 01");
-
-                    } catch (InterruptedException e) {
+                        CongratsManagement congratsManagement = new CongratsManagement(MainStage,PartieModel);
+                    } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    PartieModel.getCurrentCase().DisableJoueur(); //--------------------------------------------------
-                    PartieModel.setInterCase(PartieModel.getCaseDestination());
-                    PartieModel.setCurrentCase(PartieModel.getInterCase()); //hna current = destination te3 iteration lwla...li 7ssbtha m3a lwl nl jouer l9dima
-
-
-                    System.out.println("4 Mor Setting CurrentCase <--- Case Destination. ");
-                    System.out.println("La Current Case  : "+ PartieModel.getCurrentCase().getIndex());
-                    System.out.println("La Case inter : "+ PartieModel.getInterCase().getIndex());
-                    System.out.println("La Case Destination  : "+ PartieModel.getCaseDestination().getIndex());
-//                    PartieModel.getCurrentCase().ActivateJoueur();
-                    PartieModel.JouerEncore();
-
-                    PartieModel.getCurrentCase().ActivateJoueur();
-                    System.out.println("5 Mor jouer Encore. ");
-                    System.out.println("La Current Case  : "+ PartieModel.getCurrentCase().getIndex());
-                    System.out.println("La Case inter : "+ PartieModel.getInterCase().getIndex());
-                    System.out.println("La Case Destination  : "+ PartieModel.getCaseDestination().getIndex());
-
-                    System.out.println("U r not disabeling current l9dim ");
-                  PartieModel.setCurrentCase(PartieModel.getCaseDestination()); //pour pouvoir avancer.
-                    PartieModel.getCurrentCase().DisableJoueur();
-                  PartieModel.getCaseDestination().ActivateJoueur();
-
 
 
                 }
 
-                DiceEnrolled=false;
-                rollDicesBtn.setDisable(false);
             } else{
                 GuideMessage.setText("NON!,Vous devez sur la case "+PartieModel.getInterCase().getIndex());
             }
@@ -252,7 +301,30 @@ private class onCaseClickHandle implements EventHandler<ActionEvent>{
 
 
 
+    @FXML
+    void AllerACase(ActionEvent event) {
 
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setHeaderText("Veuillez entrez le numero de la case que vous souhaitez tester");
+        dialog.setContentText("Numero d'une case : ");
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent((numero)-> {
+            force = true;
+            int numCase = Integer.parseInt(numero);
+            PartieModel.getCurrentCase().DisableJoueur();
+            PartieModel.setCurrentCase(PartieModel.getPlateau().getCase(numCase));
+            PartieModel.setInterCase(PartieModel.getPlateau().getCase(numCase));
+            PartieModel.setCaseDestination(PartieModel.getPlateau().getCase(numCase));
+            PartieModel.getJoueur().setCase(PartieModel.getPlateau().getCase(numCase));
+            GuideMessage.setText("Veuillez cliquer sur la case "+ numCase);
+            DiceEnrolled = true;
+            DicesResult = 0;
+            rollDicesBtn.setDisable(true);
+        });
+
+
+
+    }
 
     public GridPane getGrille() {
         return grille;

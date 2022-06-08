@@ -29,7 +29,7 @@ public class PlateauManagement {
 
 //        controller.setPlateauModel(plateauModel);
         controller.setPartieModel(partieModel);
-
+//        controller.setMainStage();
         controller.remplireGrille();
     }
 
