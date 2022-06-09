@@ -17,6 +17,16 @@ public class CongratsController {
 
         private Stage MainStage;
         private Stage DialogStage;
+
+    public int getBestScore() {
+        return BestScore;
+    }
+
+    public void setBestScore(int bestScore) {
+        BestScore = bestScore;
+    }
+
+    private int BestScore;
     @FXML
     private Label CongratsMsg;
 
@@ -53,7 +63,7 @@ public class CongratsController {
             PartieModel.getJoueur().setScore(PartieModel.getScore());
             ScoreComparMsg.setText("Olaa! Vous avez battu votre meilleur score !");
         } else {
-            ScoreComparMsg.setText("Meilleur score li kan 3ndk khir, Good luck next time!");
+            ScoreComparMsg.setText("Vous n'avez pas battu votre meilleur score, Good luck next time!");
         }
 //                    stage.setTitle("Game Of Goose");
 //                  String css = this.getClass().getResource("/tp/CssStyles/WelcomePage.css").toExternalForm();

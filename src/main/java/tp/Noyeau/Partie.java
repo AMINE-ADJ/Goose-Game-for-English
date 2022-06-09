@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class Partie implements Serializable {
     private Joueur joueur;
     private Plateau_jeu plateau;
+    private Partie PartieModel;
     private boolean partie_finie;
     private int score = 0;
     private Case CurrentCase;
@@ -107,6 +108,7 @@ public class Partie implements Serializable {
                 System.out.println("Le joueur doit se deplacer premierement en clickant sur la case :" + inter_index);
                 System.out.println(" la case :" + inter_index + " est une case intermediaire de couleur "
                         + this.getPlateau().getCase(inter_index).getCouleur());
+
                 index_destination = this.getPlateau().getCase(inter_index).mouvement(inter_index); //ytappliqua l effect de la case intermediaire.ida kanet parcout mattbdlch
 
                 this.score = this.getPlateau().getCase(inter_index).score(this.score); //PartieModel lzm tkoun kayna ....
@@ -123,7 +125,9 @@ public class Partie implements Serializable {
                 } else if (index_destination < 0) {
                     index_destination = 0;
                 }
+
             } else {
+
                 int index_fin = taille_plateau - 1;
                 int supplementaire = (resultat - ((taille_plateau - 1) - index_actuel));
                 index_destination = index_fin - supplementaire;
@@ -148,14 +152,14 @@ public class Partie implements Serializable {
         }
 
 
+
+
         public void JouerEncore(){
             int indexDestination = CurrentCase.mouvement(CurrentCase.getIndex());
           int  taille_plateau = plateau.getNombre_cases();
             if (indexDestination >= taille_plateau - 1) { // case bonus a 99
                 indexDestination = taille_plateau - 1; //bonus y9der yrb7k direct....
                 partie_finie = true;
-
-
             } else if (indexDestination < 0) {
                 indexDestination = 0;
             }
@@ -170,5 +174,7 @@ public class Partie implements Serializable {
 
 
         }
+
+
 //    }
 }

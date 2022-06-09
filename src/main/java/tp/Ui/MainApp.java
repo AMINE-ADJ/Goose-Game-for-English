@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import tp.Noyeau.Jeu;
 
 public class MainApp extends Application {
 
@@ -18,6 +19,7 @@ public class MainApp extends Application {
             scene.getStylesheets().add(css);
             stage.setScene(scene);
             stage.show();
+            Jeu jeu = new Jeu();
         } catch ( Exception e) { e.fillInStackTrace();}
 
     }

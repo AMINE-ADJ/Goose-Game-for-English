@@ -13,9 +13,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import tp.Noyeau.*;
+import tp.Ui.CaseDefinitionManagement;
+import tp.Ui.CaseImageManagement;
 import tp.Ui.CongratsManagement;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.Optional;
 
 public class PlateauController {
@@ -84,7 +89,6 @@ public class PlateauController {
       int de2= PartieModel.getJoueur().lance_de();
       Image De2Image = new Image(getClass().getResourceAsStream("/tp/Dices/dice0"+de2+".png"));
       diceImg2.setImage(De2Image);
-
       DicesResult = de1+de2;
 //        currentIndex = PartieModel.getCurrentCase().getIndex();
       int  interIndex = PartieModel.getCurrentCase().getIndex()+DicesResult;
@@ -106,23 +110,8 @@ public class PlateauController {
             PartieModel.setPartie_finie(true);
             PartieModel.setInterCase(PartieModel.getPlateau().getCase(taille_plateau - 1));
             PartieModel.getJoueur().setCase((PartieModel.getPlateau().getCase(taille_plateau - 1)));
-//            PartieModel.getInterCase().ActivateJoueur();
-//            PartieModel.getCurrentCase().DisableJoueur();
-//                Alert Congrats = new Alert(Alert.AlertType.INFORMATION);
-//                Congrats.setContentText("Vous avez fini la partie !");
-//                Congrats.setTitle("Congratz !");
-//                Congrats.setHeaderText("Bsahtek Kho");
-//                Congrats.showAndWait().ifPresent(rs -> {
-//                    if (rs == ButtonType.OK) {
-//                        System.out.println("Pressed OK.");
-//                        //eddih l la scene li 9belha with Switchtojeu.
-//
-//
-//                    }
-//                });
             }
         rollDicesBtn.setDisable(true); //jusqu'au clique d'une case.
-
 
     }
     //fonction de remplissage d'une grille dans plateauView a partir de plateau.Noyeau Model.
@@ -205,6 +194,15 @@ private class onCaseClickHandle implements EventHandler<ActionEvent>{
             MainStage = (Stage) ((Node )isClicked.getSource()).getScene().getWindow();
 
             if(object == PartieModel.getInterCase().getButton() ){
+//                if(!(PartieModel.getInterCase() instanceof Case_definition   || PartieModel.getInterCase() instanceof Case_image ) ){
+//
+//
+//                }
+//                if(PartieModel.getInterCase() instanceof Case_definition){
+//
+//                }else{
+//
+//                }
                 System.out.println("Inter "+PartieModel.getInterCase()+" Is Clicked !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 PartieModel.getInterCase().ActivateJoueur();
                 PartieModel.getCaseDestination().ActivateJoueur();
@@ -213,7 +211,22 @@ private class onCaseClickHandle implements EventHandler<ActionEvent>{
 //
                 PartieModel.getInterCase().ActivateJoueur();
                 if (PartieModel.getInterCase().getIndex()!=99){
-                  if(!force) { PartieModel.JouerUneFois(DicesResult);} //misajorit les cases....current dok hiya inter l9dima w 3ndi destination lekher ga3 avec l effet de intercase..
+                    if(PartieModel.getInterCase() instanceof Case_definition){
+                        try {
+                            JoueurCaseDefinition();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        //u should change la interCase dok + l'impact de la case.
+                    }else if(PartieModel.getInterCase() instanceof Case_image ){
+                        try {
+                            JoueurCaseImage();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    else if(!force) { PartieModel.JouerUneFois(DicesResult);}
+                  //misajorit les cases....current dok hiya inter l9dima w 3ndi destination lekher ga3 avec l effet de intercase..
 //              int  indexDestination = PartieModel.getCaseDestination().getIndex();
                     System.out.println("2 Mor Jouer Une Fois. ");
                     System.out.println("La Current Case  : "+ PartieModel.getCurrentCase().getIndex());
@@ -229,17 +242,14 @@ private class onCaseClickHandle implements EventHandler<ActionEvent>{
                         try {
                             PartieModel.getInterCase().DisableJoueur();
                             GuideMessage.setText("Oh C'est une Case "+PartieModel.getInterCase().getType()+" !");
-
                             Thread.sleep(500);
                             System.out.println("First waiting 01");
-
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                         PartieModel.getCurrentCase().DisableJoueur(); //--------------------------------------------------
                         PartieModel.setInterCase(PartieModel.getCaseDestination());
                         PartieModel.setCurrentCase(PartieModel.getInterCase()); //hna current = destination te3 iteration lwla...li 7ssbtha m3a lwl nl jouer l9dima
-
 
                         System.out.println("4 Mor Setting CurrentCase <--- Case Destination. ");
                         System.out.println("La Current Case  : "+ PartieModel.getCurrentCase().getIndex());
@@ -248,8 +258,24 @@ private class onCaseClickHandle implements EventHandler<ActionEvent>{
 //                    PartieModel.getCurrentCase().ActivateJoueur();
                         if (PartieModel.getInterCase().getIndex()!=99){
                             PartieModel.JouerEncore();
+                            Score_Joueur.setText(Integer.toString(PartieModel.getScore()));
+//                            if(PartieModel.getInterCase() instanceof Case_definition){
+//                                try {
+//                                    JoueurCaseDefinition();
+//                                    System.out.println("Rani f jouerEncoredefintion ");
+//                                } catch (IOException e) {
+//                                    e.printStackTrace();
+//                                }
+//                                //u should change la interCase dok + l'impact de la case.
+//                            }else if(PartieModel.getInterCase() instanceof Case_image ){
+//                                try {
+//                                    JoueurCaseImage();
+//                                } catch (IOException e) {
+//                                    e.printStackTrace();
+//                                }
+//                            }
+//                            else { PartieModel.JouerEncore();}
                         }
-
 
                         PartieModel.getCurrentCase().ActivateJoueur();
                         System.out.println("5 Mor jouer Encore. ");
@@ -262,8 +288,6 @@ private class onCaseClickHandle implements EventHandler<ActionEvent>{
                         PartieModel.getCurrentCase().DisableJoueur();
                         PartieModel.getCaseDestination().ActivateJoueur();
 
-
-
                     }
                     if(PartieModel.getCurrentCase().getIndex()==99){
                         try {
@@ -275,6 +299,7 @@ private class onCaseClickHandle implements EventHandler<ActionEvent>{
                     force = false;
                     DiceEnrolled=false;
                     rollDicesBtn.setDisable(false);
+
                 }else{
                     //fin partie.
                     PartieModel.getInterCase().ActivateJoueur();
@@ -284,8 +309,6 @@ private class onCaseClickHandle implements EventHandler<ActionEvent>{
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
-
                 }
 
             } else{
@@ -322,6 +345,15 @@ private class onCaseClickHandle implements EventHandler<ActionEvent>{
 
     }
 
+
+    public void JoueurCaseDefinition () throws IOException {
+        CaseDefinitionManagement CaseDefManage = new CaseDefinitionManagement();
+//        CaseDefManage.getDefinitions();
+        CaseDefManage.LoadCaseDefinitionView(PartieModel,MainStage);
+    }public void JoueurCaseImage () throws IOException {
+        CaseImageManagement CaseImageManage = new CaseImageManagement();
+        CaseImageManage.LoadCaseImageView(PartieModel,MainStage);
+    }
     public GridPane getGrille() {
         return grille;
     }
@@ -377,6 +409,30 @@ private class onCaseClickHandle implements EventHandler<ActionEvent>{
     public void setDiceImg1(ImageView diceImg1) {
         this.diceImg1 = diceImg1;
     }
+
+
+//    public void SavePartieModel() {
+//        try {
+//            FileOutputStream fileOut = new FileOutputStream("data");
+//            ObjectOutputStream OBF = new ObjectOutputStream(fileOut);
+//            OBF.writeObject(players);
+//            OBF.close();
+//            fileOut.close();
+//
+//            FileOutputStream filebest = new FileOutputStream("bestPlayer");
+//            ObjectOutputStream Best = new ObjectOutputStream(filebest);
+//            Best.writeObject(this.best);
+//            Best.close();
+//            filebest.close();
+//
+//            System.out.println("\nSerialisation terminÃ©e avec succÃ¨s...\n");
+//
+//        } catch (FileNotFoundException e) {
+//
+//        } catch (IOException e) {
+//
+//        }
+//    }
 
 
 

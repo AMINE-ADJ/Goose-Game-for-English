@@ -17,14 +17,15 @@ public class PlateauManagement {
  private Plateau_jeu plateauModel;
  private  PlateauController controller;
  private Partie partieModel;
-    public PlateauManagement() throws IOException {
+    public PlateauManagement(String Name) throws IOException {
+        this.partieModel = partieModel;
     loader= new FXMLLoader(getClass().getResource("/tp/PlateauView.fxml"));
      root =  loader.load();
-         controller = loader.getController();
+     controller = loader.getController();
          //plateau jeu test brk...sinn ra7 yji hada m3mr.
         plateauModel = new Plateau_jeu();//for testing brk
         plateauModel.init_plateau();
-        Joueur joueurModel = new Joueur("Nassiiim", plateauModel.getCase(0));
+        Joueur joueurModel = new Joueur(Name, plateauModel.getCase(0));
          partieModel = new Partie(plateauModel,joueurModel);//la partie mattcryach hna...t3mrha mn berra w npassiha direct ll controller psk rahi champs....
 
 //        controller.setPlateauModel(plateauModel);
@@ -67,5 +68,9 @@ public class PlateauManagement {
     }
     public Partie getPartieModel() {
         return partieModel;
+    }
+
+    public void SavePartie(){
+
     }
 }

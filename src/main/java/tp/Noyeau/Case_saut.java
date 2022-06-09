@@ -1,5 +1,7 @@
 package tp.Noyeau;
 
+import javafx.scene.control.Alert;
+
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Case_saut extends Case {
@@ -33,6 +35,9 @@ public class Case_saut extends Case {
         System.out.print("La case " + this.getIndex() + " est une case saut!");
         int new_index = ThreadLocalRandom.current().nextInt(1, 99 + 1);
         System.out.println(" Le joueur va atteindre la case :  " + new_index + ".");
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setContentText("Vous devez allez a la case "+new_index);
+        alert.show();
         return new_index;
     }
 

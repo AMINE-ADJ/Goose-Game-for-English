@@ -1,10 +1,15 @@
 package tp.Noyeau;
 
+import tp.Ui.CaseDefinitionManagement;
+
+import java.io.IOException;
+
 public class Case_definition extends Case {
     protected final String type ="Definition";
     protected final String couleur = "blue";
     protected int index; // l'index de la case de definition
     protected Joueur joueur; // le joueur a la case de definition
+//    protected CaseDefinitionManagement CaseDefManage = new CaseDefinitionManagement();
 
     // le constructeur de la case de definition
     public Case_definition(int index, Joueur joueur) {
@@ -27,6 +32,7 @@ public class Case_definition extends Case {
     public int mouvement(int inter_index) {
         return inter_index +4;
     }
+
 
     public int mouvement(boolean reponse_juste) {
         int new_index = this.getIndex();

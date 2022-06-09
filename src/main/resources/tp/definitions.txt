@@ -1,0 +1,5 @@
+A domestic felin,cat,3
+A domestic Canidae,dog,3
+A modern calculating machine,computer,8
+The source of life,water,5
+What we wear to cover ourselves,clothes,7

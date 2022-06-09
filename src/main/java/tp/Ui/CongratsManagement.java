@@ -15,6 +15,7 @@ public class CongratsManagement {
     public Parent root;
     private FXMLLoader loader;
 //    private Plateau_jeu plateauModel;
+    private int BestScore=100;
     private CongratsController controller;
 //    private Partie PartieModel;
 //    private Partie partieModel;
@@ -27,12 +28,14 @@ public class CongratsManagement {
         loader= new FXMLLoader(getClass().getResource("/tp/Congratulations.fxml"));
         root =  loader.load();
         controller = loader.getController();
+//        controller.setBestScore();
 //        controller.ShowCongratsStage(PartieModel,MainStage);
 //        Congratsstage.setTitle("Game Of Goose");
 //        String css = this.getClass().getResource("/tp/CssStyles/WelcomePage.css").toExternalForm();
         Scene scene = new Scene(root);
 //        scene.getStylesheets().add(css);
         Congratsstage.setScene(scene);
+
         controller.ShowCongratsStage(PartieModel,MainStage,Congratsstage);
         Congratsstage.setResizable(false);
 

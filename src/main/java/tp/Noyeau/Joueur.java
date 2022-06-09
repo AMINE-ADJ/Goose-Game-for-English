@@ -9,6 +9,10 @@ public class Joueur implements Serializable {
     protected Case case_actuelle;
     protected int score;
 
+
+    public Joueur(){
+
+    }
     public Joueur(int id, String nom) {
         this.id = id;
         this.nom = nom;
